@@ -155,14 +155,15 @@ export default function Home() {
                     ].map((row, rowIndex) => (
                       <div key={rowIndex} className="grid grid-cols-5 gap-4">
                         {row.map((item, index) => (
-                      <Card key={index} className="hover:bg-accent cursor-pointer transition-colors">
-                        <CardContent className="p-4 text-center">
-                          <p className="text-3xl mb-1">{item.char}</p>
-                          <p className="text-sm text-muted-foreground">{item.romaji}</p>
-                        </CardContent>
-                      </Card>
+                          <Card key={index} className="hover:bg-accent cursor-pointer transition-colors">
+                            <CardContent className="p-4 text-center">
+                              <p className="text-3xl mb-1">{item.char}</p>
+                              <p className="text-sm text-muted-foreground">{item.romaji}</p>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
                     ))}
-                  </div>
                 </TabsContent>
                 <TabsContent value="hiragana">
                   <div className="p-4 text-center text-muted-foreground">
