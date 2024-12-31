@@ -112,14 +112,28 @@ export default function Home() {
           </TabsContent>
 
           <TabsContent value="practice">
-            <Card>
-              <CardHeader>
-                <CardTitle>Practice Section</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Practice content coming soon...</p>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">Katakana Practice</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { char: 'ア', romaji: 'a' },
+                  { char: 'イ', romaji: 'i' },
+                  { char: 'ウ', romaji: 'u' },
+                  { char: 'エ', romaji: 'e' },
+                  { char: 'オ', romaji: 'o' },
+                  { char: 'カ', romaji: 'ka' },
+                  { char: 'キ', romaji: 'ki' },
+                  { char: 'ク', romaji: 'ku' },
+                ].map((item, index) => (
+                  <Card key={index} className="hover:bg-accent cursor-pointer transition-colors">
+                    <CardContent className="p-6 text-center">
+                      <p className="text-4xl mb-2">{item.char}</p>
+                      <p className="text-sm text-muted-foreground">{item.romaji}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="history">
