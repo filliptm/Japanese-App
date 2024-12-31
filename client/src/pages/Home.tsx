@@ -164,7 +164,6 @@ export default function Home() {
                     ))}
                   </div>
                 </TabsContent>
-                
                 <TabsContent value="hiragana">
                   <div className="p-4 text-center text-muted-foreground">
                     Hiragana section coming soon...
