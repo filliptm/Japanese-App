@@ -41,7 +41,7 @@ export default function Home() {
         <Tabs defaultValue="translate" className="w-full">
           <TabsList className="w-full justify-start">
             <TabsTrigger value="translate">Translate</TabsTrigger>
-            <TabsTrigger value="practice">Practice</TabsTrigger>
+            <TabsTrigger value="characters">Characters</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
           
@@ -110,7 +110,7 @@ export default function Home() {
             
           </TabsContent>
 
-          <TabsContent value="practice">
+          <TabsContent value="characters">
             <div className="space-y-4">
               <Tabs defaultValue="katakana" className="w-full">
                 <TabsList>
