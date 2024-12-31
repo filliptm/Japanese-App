@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -164,6 +163,7 @@ export default function Home() {
                         ))}
                       </div>
                     ))}
+                  </div>
                 </TabsContent>
                 <TabsContent value="hiragana">
                   <div className="p-4 text-center text-muted-foreground">
