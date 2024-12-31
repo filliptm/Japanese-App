@@ -10,6 +10,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
   const [inputText, setInputText] = useState("");
+  const [isFlashcardMode, setIsFlashcardMode] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  
+  const allKatakana = [
+    { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, 
+    { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, 
+    { char: 'オ', romaji: 'o' }, { char: 'カ', romaji: 'ka' },
+    { char: 'キ', romaji: 'ki' }, { char: 'ク', romaji: 'ku' },
+    { char: 'ケ', romaji: 'ke' }, { char: 'コ', romaji: 'ko' }
+  ];
+
+  const currentCard = allKatakana[currentCardIndex];
+  
+  const nextCard = () => {
+    setCurrentCardIndex(prev => (prev + 1) % allKatakana.length);
+    setShowAnswer(false);
+  };
   const { toast } = useToast();
 
   const translation = useMutation({
@@ -119,7 +137,39 @@ export default function Home() {
                 </TabsList>
                 
                 <TabsContent value="katakana">
-                  <div className="space-y-4 mt-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-semibold">Katakana Chart</h3>
+                    <Button
+                      onClick={() => setIsFlashcardMode(prev => !prev)}
+                      variant="outline"
+                    >
+                      {isFlashcardMode ? "View Chart" : "Practice Flashcards"}
+                    </Button>
+                  </div>
+                  <div className="space-y-4">
+                    {isFlashcardMode ? (
+                      <div className="flex flex-col items-center space-y-4">
+                        <Card className="w-48 h-48 flex items-center justify-center cursor-pointer"
+                              onClick={() => setShowAnswer(!showAnswer)}>
+                          <CardContent className="text-center p-6">
+                            <p className="text-6xl mb-4">
+                              {currentCard.char}
+                            </p>
+                            {showAnswer && (
+                              <p className="text-xl text-muted-foreground">
+                                {currentCard.romaji}
+                              </p>
+                            )}
+                          </CardContent>
+                        </Card>
+                        <div className="space-x-4">
+                          <Button onClick={nextCard}>Next Card</Button>
+                          <Button variant="outline" onClick={() => setShowAnswer(!showAnswer)}>
+                            {showAnswer ? "Hide Answer" : "Show Answer"}
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
                     {[
                       [
                         { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, { char: 'オ', romaji: 'o' }
@@ -162,7 +212,7 @@ export default function Home() {
                           </Card>
                         ))}
                       </div>
-                    ))}
+                    )}
                   </div>
                 </TabsContent>
                 <TabsContent value="hiragana">
