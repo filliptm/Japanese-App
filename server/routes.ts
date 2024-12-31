@@ -26,7 +26,12 @@ export function registerRoutes(app: Express): Server {
         max_tokens: 1024,
         messages: [{
           role: "user",
-          content: `Translate the following English text to Japanese. Provide both the Japanese characters and romaji reading. Format the response as JSON with "japanese" and "romaji" keys.
+          content: `Translate the following English text to Japanese. Provide:
+1. The Japanese characters
+2. The romaji reading
+3. Break down the pronunciation into syllables (separated by hyphens)
+
+Format the response as JSON with "japanese", "romaji", and "syllables" keys.
 
 English text: ${text}`
         }],

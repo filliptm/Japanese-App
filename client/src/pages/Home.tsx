@@ -78,6 +78,9 @@ export default function Home() {
                         <p className="text-sm text-muted-foreground">
                           {translation.data.romaji}
                         </p>
+                        <p className="text-sm text-muted-foreground font-mono">
+                          {translation.data.syllables}
+                        </p>
                       </div>
                     ) : (
                       <p className="text-muted-foreground text-center">

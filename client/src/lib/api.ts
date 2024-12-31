@@ -1,6 +1,7 @@
 interface TranslationResponse {
   japanese: string;
   romaji: string;
+  syllables: string;
 }
 
 export async function translateText(text: string): Promise<TranslationResponse> {
