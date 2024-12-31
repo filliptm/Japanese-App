@@ -50,7 +50,23 @@ export default function Home() {
             <div className="grid gap-8 md:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>English Text</CardTitle>
+                  <CardTitle className="flex justify-between items-center">
+                    <span>English Text</span>
+                    <Button
+                      onClick={handleTranslate}
+                      disabled={translation.isPending || !inputText.trim()}
+                      size="sm"
+                    >
+                      {translation.isPending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Translating...
+                        </>
+                      ) : (
+                        "Translate"
+                      )}
+                    </Button>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Textarea
@@ -92,22 +108,7 @@ export default function Home() {
               </Card>
             </div>
 
-            <div className="flex justify-center">
-              <Button
-                onClick={handleTranslate}
-                disabled={translation.isPending || !inputText.trim()}
-                className="w-full max-w-xs"
-              >
-                {translation.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Translating...
-                  </>
-                ) : (
-                  "Translate"
-                )}
-              </Button>
-            </div>
+            
           </TabsContent>
 
           <TabsContent value="practice">
