@@ -113,26 +113,42 @@ export default function Home() {
 
           <TabsContent value="practice">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Katakana Practice</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[
-                  { char: 'ア', romaji: 'a' },
-                  { char: 'イ', romaji: 'i' },
-                  { char: 'ウ', romaji: 'u' },
-                  { char: 'エ', romaji: 'e' },
-                  { char: 'オ', romaji: 'o' },
-                  { char: 'カ', romaji: 'ka' },
-                  { char: 'キ', romaji: 'ki' },
-                  { char: 'ク', romaji: 'ku' },
-                ].map((item, index) => (
-                  <Card key={index} className="hover:bg-accent cursor-pointer transition-colors">
-                    <CardContent className="p-6 text-center">
-                      <p className="text-4xl mb-2">{item.char}</p>
-                      <p className="text-sm text-muted-foreground">{item.romaji}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <Tabs defaultValue="katakana" className="w-full">
+                <TabsList>
+                  <TabsTrigger value="katakana">Katakana</TabsTrigger>
+                  <TabsTrigger value="hiragana">Hiragana</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="katakana">
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                    {[
+                      { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, { char: 'オ', romaji: 'o' },
+                      { char: 'カ', romaji: 'ka' }, { char: 'キ', romaji: 'ki' }, { char: 'ク', romaji: 'ku' }, { char: 'ケ', romaji: 'ke' }, { char: 'コ', romaji: 'ko' },
+                      { char: 'サ', romaji: 'sa' }, { char: 'シ', romaji: 'shi' }, { char: 'ス', romaji: 'su' }, { char: 'セ', romaji: 'se' }, { char: 'ソ', romaji: 'so' },
+                      { char: 'タ', romaji: 'ta' }, { char: 'チ', romaji: 'chi' }, { char: 'ツ', romaji: 'tsu' }, { char: 'テ', romaji: 'te' }, { char: 'ト', romaji: 'to' },
+                      { char: 'ナ', romaji: 'na' }, { char: 'ニ', romaji: 'ni' }, { char: 'ヌ', romaji: 'nu' }, { char: 'ネ', romaji: 'ne' }, { char: 'ノ', romaji: 'no' },
+                      { char: 'ハ', romaji: 'ha' }, { char: 'ヒ', romaji: 'hi' }, { char: 'フ', romaji: 'fu' }, { char: 'ヘ', romaji: 'he' }, { char: 'ホ', romaji: 'ho' },
+                      { char: 'マ', romaji: 'ma' }, { char: 'ミ', romaji: 'mi' }, { char: 'ム', romaji: 'mu' }, { char: 'メ', romaji: 'me' }, { char: 'モ', romaji: 'mo' },
+                      { char: 'ヤ', romaji: 'ya' }, { char: 'ユ', romaji: 'yu' }, { char: 'ヨ', romaji: 'yo' },
+                      { char: 'ラ', romaji: 'ra' }, { char: 'リ', romaji: 'ri' }, { char: 'ル', romaji: 'ru' }, { char: 'レ', romaji: 're' }, { char: 'ロ', romaji: 'ro' },
+                      { char: 'ワ', romaji: 'wa' }, { char: 'ヲ', romaji: 'wo' }, { char: 'ン', romaji: 'n' }
+                    ].map((item, index) => (
+                      <Card key={index} className="hover:bg-accent cursor-pointer transition-colors">
+                        <CardContent className="p-4 text-center">
+                          <p className="text-3xl mb-1">{item.char}</p>
+                          <p className="text-sm text-muted-foreground">{item.romaji}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="hiragana">
+                  <div className="p-4 text-center text-muted-foreground">
+                    Hiragana section coming soon...
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           </TabsContent>
 
