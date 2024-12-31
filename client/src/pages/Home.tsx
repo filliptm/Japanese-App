@@ -37,8 +37,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4 md:p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted p-2 md:p-8">
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-8">
         <Tabs defaultValue="translate" className="w-full">
           <TabsList className="w-full justify-start">
             <TabsTrigger value="translate">Translate</TabsTrigger>
@@ -57,7 +57,7 @@ export default function Home() {
                     placeholder="Enter English text here..."
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    className="min-h-[200px] resize-none"
+                    className="min-h-[120px] md:min-h-[200px] resize-none"
                   />
                 </CardContent>
               </Card>
@@ -67,7 +67,7 @@ export default function Home() {
                   <CardTitle>Japanese Translation</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="min-h-[200px] p-3 bg-muted rounded-md">
+                  <div className="min-h-[120px] md:min-h-[200px] p-2 md:p-3 bg-muted rounded-md">
                     {translation.isPending ? (
                       <div className="h-full flex items-center justify-center">
                         <Loader2 className="h-6 w-6 animate-spin" />
