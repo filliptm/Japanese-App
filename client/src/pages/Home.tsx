@@ -169,8 +169,7 @@ export default function Home() {
                           </Button>
                         </div>
                       </div>
-                    ) : (
-                    {[
+                    ) : ([
                       [
                         { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, { char: 'オ', romaji: 'o' }
                       ],
