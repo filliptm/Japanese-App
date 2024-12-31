@@ -13,6 +13,8 @@ export default function Home() {
   const [isFlashcardMode, setIsFlashcardMode] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [options, setOptions] = useState<Array<{ char: string; romaji: string }>>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<string>("");
   
   const allKatakana = [
     { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, 
@@ -24,10 +26,34 @@ export default function Home() {
 
   const currentCard = allKatakana[currentCardIndex];
   
-  const nextCard = () => {
-    setCurrentCardIndex(prev => (prev + 1) % allKatakana.length);
-    setShowAnswer(false);
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
   };
+
+  const generateOptions = (correct: { char: string; romaji: string }) => {
+    const otherOptions = allKatakana.filter(k => k.romaji !== correct.romaji);
+    const shuffledOptions = shuffleArray(otherOptions).slice(0, 4);
+    const allOptions = shuffleArray([...shuffledOptions, correct]);
+    setOptions(allOptions);
+  };
+
+  const nextCard = () => {
+    setShowAnswer(false);
+    const nextIndex = Math.floor(Math.random() * allKatakana.length);
+    setCurrentCardIndex(nextIndex);
+    generateOptions(allKatakana[nextIndex]);
+  };
+
+  React.useEffect(() => {
+    if (isFlashcardMode) {
+      generateOptions(currentCard);
+    }
+  }, [isFlashcardMode]);
   const { toast } = useToast();
 
   const translation = useMutation({
@@ -149,25 +175,45 @@ export default function Home() {
                   <div className="space-y-4">
                     {isFlashcardMode ? (
                       <div className="flex flex-col items-center space-y-4">
-                        <Card className="w-48 h-48 flex items-center justify-center cursor-pointer"
-                              onClick={() => setShowAnswer(!showAnswer)}>
+                        <Card className="w-48 h-48 flex items-center justify-center">
                           <CardContent className="text-center p-6">
                             <p className="text-6xl mb-4">
                               {currentCard.char}
                             </p>
-                            {showAnswer && (
-                              <p className="text-xl text-muted-foreground">
-                                {currentCard.romaji}
-                              </p>
-                            )}
                           </CardContent>
                         </Card>
-                        <div className="space-x-4">
-                          <Button onClick={nextCard}>Next Card</Button>
-                          <Button variant="outline" onClick={() => setShowAnswer(!showAnswer)}>
-                            {showAnswer ? "Hide Answer" : "Show Answer"}
-                          </Button>
+                        <div className="grid grid-cols-2 gap-2 w-full max-w-md">
+                          {options.map((option, index) => (
+                            <Button
+                              key={index}
+                              variant={selectedAnswer === option.romaji 
+                                ? (showAnswer 
+                                  ? option.romaji === currentCard.romaji 
+                                    ? "default"
+                                    : "destructive"
+                                  : "default")
+                                : "outline"
+                              }
+                              onClick={() => {
+                                setSelectedAnswer(option.romaji);
+                                setShowAnswer(true);
+                              }}
+                              disabled={showAnswer}
+                              className="h-20 text-lg"
+                            >
+                              {option.romaji}
+                            </Button>
+                          ))}
                         </div>
+                        <Button 
+                          onClick={() => {
+                            nextCard();
+                            setSelectedAnswer("");
+                          }} 
+                          className="w-full max-w-md"
+                        >
+                          Next Card
+                        </Button>
                       </div>
                     ) : (
                       <div className="grid gap-4">
