@@ -169,10 +169,12 @@ export default function Home() {
                           </Button>
                         </div>
                       </div>
-                    ) : ([
-                      [
-                        { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, { char: 'オ', romaji: 'o' }
-                      ],
+                    ) : (
+                      <div className="grid gap-4">
+                        {[
+                          [
+                            { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, { char: 'オ', romaji: 'o' }
+                          ],
                       [
                         { char: 'カ', romaji: 'ka' }, { char: 'キ', romaji: 'ki' }, { char: 'ク', romaji: 'ku' }, { char: 'ケ', romaji: 'ke' }, { char: 'コ', romaji: 'ko' }
                       ],
@@ -211,6 +213,7 @@ export default function Home() {
                           </Card>
                         ))}
                       </div>
+                    </div>
                     )}
                   </div>
                 </TabsContent>
