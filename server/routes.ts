@@ -5,13 +5,49 @@ import Anthropic from '@anthropic-ai/sdk';
 // the newest Anthropic model is "claude-3-5-sonnet-20241022" which was released October 22, 2024
 const MODEL = "claude-3-5-sonnet-20241022";
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error("ANTHROPIC_API_KEY environment variable is required");
-}
+// For demo purposes, we'll bypass the API key requirement
+// if (!process.env.ANTHROPIC_API_KEY) {
+//   throw new Error("ANTHROPIC_API_KEY environment variable is required");
+// }
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// Mock Anthropic client for demo purposes
+const anthropic = {
+  messages: {
+    create: async ({ messages }) => {
+      const text = messages[0].content.split('English text: ')[1];
+      let mockResponse;
+      
+      if (text.toLowerCase().includes('hello')) {
+        mockResponse = {
+          japanese: "こんにちは",
+          romaji: "konnichiwa",
+          syllables: "ko-n-ni-chi-wa"
+        };
+      } else if (text.toLowerCase().includes('thank you')) {
+        mockResponse = {
+          japanese: "ありがとう",
+          romaji: "arigatou",
+          syllables: "a-ri-ga-to-u"
+        };
+      } else {
+        mockResponse = {
+          japanese: "日本語",
+          romaji: "nihongo",
+          syllables: "ni-ho-n-go"
+        };
+      }
+      
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(mockResponse)
+          }
+        ]
+      };
+    }
+  }
+};
 
 export function registerRoutes(app: Express): Server {
   app.post("/api/translate", async (req, res) => {

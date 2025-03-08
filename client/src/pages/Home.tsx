@@ -17,11 +17,16 @@ export default function Home() {
   const [selectedAnswer, setSelectedAnswer] = useState<string>("");
   
   const allKatakana = [
-    { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, 
-    { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, 
-    { char: 'オ', romaji: 'o' }, { char: 'カ', romaji: 'ka' },
-    { char: 'キ', romaji: 'ki' }, { char: 'ク', romaji: 'ku' },
-    { char: 'ケ', romaji: 'ke' }, { char: 'コ', romaji: 'ko' }
+    { char: 'ア', romaji: 'a' }, { char: 'イ', romaji: 'i' }, { char: 'ウ', romaji: 'u' }, { char: 'エ', romaji: 'e' }, { char: 'オ', romaji: 'o' },
+    { char: 'カ', romaji: 'ka' }, { char: 'キ', romaji: 'ki' }, { char: 'ク', romaji: 'ku' }, { char: 'ケ', romaji: 'ke' }, { char: 'コ', romaji: 'ko' },
+    { char: 'サ', romaji: 'sa' }, { char: 'シ', romaji: 'shi' }, { char: 'ス', romaji: 'su' }, { char: 'セ', romaji: 'se' }, { char: 'ソ', romaji: 'so' },
+    { char: 'タ', romaji: 'ta' }, { char: 'チ', romaji: 'chi' }, { char: 'ツ', romaji: 'tsu' }, { char: 'テ', romaji: 'te' }, { char: 'ト', romaji: 'to' },
+    { char: 'ナ', romaji: 'na' }, { char: 'ニ', romaji: 'ni' }, { char: 'ヌ', romaji: 'nu' }, { char: 'ネ', romaji: 'ne' }, { char: 'ノ', romaji: 'no' },
+    { char: 'ハ', romaji: 'ha' }, { char: 'ヒ', romaji: 'hi' }, { char: 'フ', romaji: 'fu' }, { char: 'ヘ', romaji: 'he' }, { char: 'ホ', romaji: 'ho' },
+    { char: 'マ', romaji: 'ma' }, { char: 'ミ', romaji: 'mi' }, { char: 'ム', romaji: 'mu' }, { char: 'メ', romaji: 'me' }, { char: 'モ', romaji: 'mo' },
+    { char: 'ヤ', romaji: 'ya' }, { char: 'ユ', romaji: 'yu' }, { char: 'ヨ', romaji: 'yo' },
+    { char: 'ラ', romaji: 'ra' }, { char: 'リ', romaji: 'ri' }, { char: 'ル', romaji: 'ru' }, { char: 'レ', romaji: 're' }, { char: 'ロ', romaji: 'ro' },
+    { char: 'ワ', romaji: 'wa' }, { char: 'ヲ', romaji: 'wo' }, { char: 'ン', romaji: 'n' }
   ];
 
   const currentCard = allKatakana[currentCardIndex];
@@ -36,15 +41,55 @@ export default function Home() {
   };
 
   const generateOptions = (correct: { char: string; romaji: string }) => {
+    // Filter out the correct answer
     const otherOptions = allKatakana.filter(k => k.romaji !== correct.romaji);
-    const shuffledOptions = shuffleArray(otherOptions).slice(0, 4);
-    const allOptions = shuffleArray([...shuffledOptions, correct]);
+    
+    // Get 4 random options from the remaining characters
+    // Try to include options from different character groups for better learning
+    const groups = [
+      otherOptions.filter(k => k.romaji.endsWith('a')),
+      otherOptions.filter(k => k.romaji.endsWith('i')),
+      otherOptions.filter(k => k.romaji.endsWith('u')),
+      otherOptions.filter(k => k.romaji.endsWith('e')),
+      otherOptions.filter(k => k.romaji.endsWith('o')),
+      otherOptions.filter(k => !['a', 'i', 'u', 'e', 'o'].includes(k.romaji.slice(-1)))
+    ].filter(group => group.length > 0);
+    
+    let selectedOptions: typeof allKatakana = [];
+    
+    // Try to pick one from each group if possible
+    for (let i = 0; i < Math.min(4, groups.length); i++) {
+      if (groups[i].length > 0) {
+        const randomIndex = Math.floor(Math.random() * groups[i].length);
+        selectedOptions.push(groups[i][randomIndex]);
+        // Remove the selected option to avoid duplicates
+        groups[i] = groups[i].filter((_, idx) => idx !== randomIndex);
+      }
+    }
+    
+    // If we don't have 4 options yet, add more from the remaining characters
+    if (selectedOptions.length < 4) {
+      const remainingOptions = otherOptions.filter(option => 
+        !selectedOptions.some(selected => selected.romaji === option.romaji)
+      );
+      const additionalOptions = shuffleArray(remainingOptions).slice(0, 4 - selectedOptions.length);
+      selectedOptions = [...selectedOptions, ...additionalOptions];
+    }
+    
+    // Combine with the correct answer and shuffle
+    const allOptions = shuffleArray([...selectedOptions, correct]);
     setOptions(allOptions);
   };
 
   const nextCard = () => {
     setShowAnswer(false);
-    const nextIndex = Math.floor(Math.random() * allKatakana.length);
+    
+    // Get a new random index that's different from the current one
+    let nextIndex;
+    do {
+      nextIndex = Math.floor(Math.random() * allKatakana.length);
+    } while (nextIndex === currentCardIndex && allKatakana.length > 1);
+    
     setCurrentCardIndex(nextIndex);
     generateOptions(allKatakana[nextIndex]);
   };
