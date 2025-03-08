@@ -17,24 +17,204 @@ const anthropic = {
       const text = messages[0].content.split('English text: ')[1];
       let mockResponse;
       
-      if (text.toLowerCase().includes('hello')) {
-        mockResponse = {
+      // Dictionary of common phrases and their translations
+      const translations = {
+        // Greetings
+        'hello': {
           japanese: "こんにちは",
           romaji: "konnichiwa",
           syllables: "ko-n-ni-chi-wa"
-        };
-      } else if (text.toLowerCase().includes('thank you')) {
-        mockResponse = {
+        },
+        'good morning': {
+          japanese: "おはようございます",
+          romaji: "ohayou gozaimasu",
+          syllables: "o-ha-yo-u go-za-i-ma-su"
+        },
+        'good evening': {
+          japanese: "こんばんは",
+          romaji: "konbanwa",
+          syllables: "ko-n-ba-n-wa"
+        },
+        'goodbye': {
+          japanese: "さようなら",
+          romaji: "sayounara",
+          syllables: "sa-yo-u-na-ra"
+        },
+        'see you later': {
+          japanese: "またね",
+          romaji: "matane",
+          syllables: "ma-ta-ne"
+        },
+        
+        // Common phrases
+        'thank you': {
           japanese: "ありがとう",
           romaji: "arigatou",
           syllables: "a-ri-ga-to-u"
-        };
+        },
+        'you\'re welcome': {
+          japanese: "どういたしまして",
+          romaji: "dou itashimashite",
+          syllables: "do-u i-ta-shi-ma-shi-te"
+        },
+        'excuse me': {
+          japanese: "すみません",
+          romaji: "sumimasen",
+          syllables: "su-mi-ma-se-n"
+        },
+        'sorry': {
+          japanese: "ごめんなさい",
+          romaji: "gomen nasai",
+          syllables: "go-me-n na-sa-i"
+        },
+        'please': {
+          japanese: "お願いします",
+          romaji: "onegaishimasu",
+          syllables: "o-ne-ga-i-shi-ma-su"
+        },
+        
+        // Questions
+        'how are you': {
+          japanese: "お元気ですか",
+          romaji: "ogenki desu ka",
+          syllables: "o-ge-n-ki de-su ka"
+        },
+        'what is your name': {
+          japanese: "お名前は何ですか",
+          romaji: "onamae wa nan desu ka",
+          syllables: "o-na-ma-e wa na-n de-su ka"
+        },
+        'where is': {
+          japanese: "どこですか",
+          romaji: "doko desu ka",
+          syllables: "do-ko de-su ka"
+        },
+        'when': {
+          japanese: "いつですか",
+          romaji: "itsu desu ka",
+          syllables: "i-tsu de-su ka"
+        },
+        'why': {
+          japanese: "なぜですか",
+          romaji: "naze desu ka",
+          syllables: "na-ze de-su ka"
+        },
+        
+        // Common sentences
+        'i am learning japanese': {
+          japanese: "私は日本語を勉強しています",
+          romaji: "watashi wa nihongo o benkyou shiteimasu",
+          syllables: "wa-ta-shi wa ni-ho-n-go o be-n-kyo-u shi-te-i-ma-su"
+        },
+        'i like japanese food': {
+          japanese: "私は日本食が好きです",
+          romaji: "watashi wa nihonshoku ga suki desu",
+          syllables: "wa-ta-shi wa ni-ho-n-sho-ku ga su-ki de-su"
+        },
+        'i want to go to japan': {
+          japanese: "私は日本に行きたいです",
+          romaji: "watashi wa nihon ni ikitai desu",
+          syllables: "wa-ta-shi wa ni-ho-n ni i-ki-ta-i de-su"
+        },
+        'i don\'t understand': {
+          japanese: "わかりません",
+          romaji: "wakarimasen",
+          syllables: "wa-ka-ri-ma-se-n"
+        },
+        'i understand': {
+          japanese: "わかります",
+          romaji: "wakarimasu",
+          syllables: "wa-ka-ri-ma-su"
+        },
+        
+        // Food related
+        'delicious': {
+          japanese: "美味しい",
+          romaji: "oishii",
+          syllables: "o-i-shi-i"
+        },
+        'water': {
+          japanese: "水",
+          romaji: "mizu",
+          syllables: "mi-zu"
+        },
+        'restaurant': {
+          japanese: "レストラン",
+          romaji: "resutoran",
+          syllables: "re-su-to-ra-n"
+        },
+        'menu': {
+          japanese: "メニュー",
+          romaji: "menyuu",
+          syllables: "me-nyu-u"
+        },
+        'check please': {
+          japanese: "お会計お願いします",
+          romaji: "okaikei onegaishimasu",
+          syllables: "o-ka-i-ke-i o-ne-ga-i-shi-ma-su"
+        }
+      };
+      
+      // Try to find a matching phrase in our dictionary
+      let foundTranslation = null;
+      const lowerText = text.toLowerCase();
+      
+      for (const [phrase, translation] of Object.entries(translations)) {
+        if (lowerText.includes(phrase)) {
+          foundTranslation = translation;
+          break;
+        }
+      }
+      
+      // If we found a match, use it; otherwise generate a more contextual response
+      if (foundTranslation) {
+        mockResponse = foundTranslation;
       } else {
-        mockResponse = {
-          japanese: "日本語",
-          romaji: "nihongo",
-          syllables: "ni-ho-n-go"
-        };
+        // Try to analyze the text and provide a more contextual response
+        if (lowerText.includes('my name is') || lowerText.includes('i am called')) {
+          mockResponse = {
+            japanese: "私の名前は[名前]です",
+            romaji: "watashi no namae wa [name] desu",
+            syllables: "wa-ta-shi no na-ma-e wa [name] de-su"
+          };
+        } else if (lowerText.includes('love') || lowerText.includes('like')) {
+          mockResponse = {
+            japanese: "私は[対象]が好きです",
+            romaji: "watashi wa [object] ga suki desu",
+            syllables: "wa-ta-shi wa [object] ga su-ki de-su"
+          };
+        } else if (lowerText.includes('want')) {
+          mockResponse = {
+            japanese: "私は[対象]が欲しいです",
+            romaji: "watashi wa [object] ga hoshii desu",
+            syllables: "wa-ta-shi wa [object] ga ho-shi-i de-su"
+          };
+        } else if (lowerText.includes('where') || lowerText.includes('location')) {
+          mockResponse = {
+            japanese: "[場所]はどこですか",
+            romaji: "[place] wa doko desu ka",
+            syllables: "[place] wa do-ko de-su ka"
+          };
+        } else if (lowerText.includes('when') || lowerText.includes('time')) {
+          mockResponse = {
+            japanese: "いつ[行動]しますか",
+            romaji: "itsu [action] shimasu ka",
+            syllables: "i-tsu [action] shi-ma-su ka"
+          };
+        } else if (lowerText.includes('how') || lowerText.includes('way')) {
+          mockResponse = {
+            japanese: "どうやって[行動]しますか",
+            romaji: "douyatte [action] shimasu ka",
+            syllables: "do-u-ya-tte [action] shi-ma-su ka"
+          };
+        } else {
+          // Default response with a note that this is a placeholder
+          mockResponse = {
+            japanese: text + " (翻訳例: これは翻訳の例です)",
+            romaji: text + " (romaji example: kore wa honyaku no rei desu)",
+            syllables: text + " (syllables example: ko-re wa ho-nya-ku no re-i de-su)"
+          };
+        }
       }
       
       return {
